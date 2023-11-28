@@ -3,14 +3,8 @@ This file contains the data models in Python that would represent the structure 
 The purpose of this file is to show how I would model the data; the actual logic of the app uses the csv file `stock-data.csv`
 """
 
-# separate out and understand what these data points are, what repeats, what's relational? 
-# create a series of classes as you would for a sqlalchemy implementation (without the HOF and such)
-
+# TODO: review me for validity
 # a stock has a `name` as it's `id`
-# that one stock has several dates (each day that passes)
-# each stock's date is associated with it's volume worth at close in usd
-# many stocks have one sector level (1 and 2)
-
 class Stock:
     name: str
 
@@ -23,4 +17,10 @@ class StockPrice:
 class SectorLevel:
     one: str
     two: str
-    stock: str # the fk to the stock this associate with
+
+class StockSectorLevel:
+    # many-to-many
+    stock: str # fk
+    sector_level_one: str #fk
+
+
