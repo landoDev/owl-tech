@@ -7,12 +7,13 @@ async def root():
     return {"message": "I am Groot!"}
 
 # TODO: Scratch pad for endpoints based on requirements (this is indpendent of how I would model it). PANDASSSSSSSSSS YAAAAAAAAASSSSS
-# NOTE: reminder to myself: the data models and actual implementation are divorced from each other. they do not and should not relate per reqs
-# however, speaking on above, it may help visualize how to handle the dataframe ops for each endpoint
+# NOTE: reading from csv should present like the data models do. So that's where this starts
 # any utils or pandas usage will start in here but as I grow out the endpoints lets assess if a util file will be cleaner in the polish run (prob will be)
 
 # list all stock data
 ## how should this be presented? Like the csv just in UI form??
+## per frontend reqs:  "Just the price series overtime is fine"
+## so would it be adequate to return a json of each asset and then their value being a list of their prices 
 # @app.get("/")
 # async def all_stocks():
     # pass

@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Future home to all the stock data. The price series should be a graph for each asset in the stock data.
         </p>
         <a
           className="App-link"
