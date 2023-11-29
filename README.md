@@ -41,4 +41,6 @@ cd api
     ```bash
     uvicorn main:app --reload
     ```
+5. Open `http://127.0.0.1:8000` in your browser to confirm the api is up!
 
+6. Access the FastAPI interactive documentation at `http://localhost:8000/docs`` to explore the available endpoints and interact with the live test scores.

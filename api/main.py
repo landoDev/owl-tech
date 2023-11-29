@@ -1,40 +1,48 @@
+from datetime import datetime, date
 from fastapi import FastAPI
-import pandas as pd
-from pydantic import BaseModel # TODO: decide if in scope to break into it's own file
+from pydantic import BaseModel, Field
+from data.utils import read_csv_data
+from typing import Dict, List, TypedDict
 
 app = FastAPI()
+app_data = read_csv_data()
 
-# cross this bridge with return types
+## RETURN TYPES ##
+# NOTE this mirrors how the csv is consumed and organized and is not a perfect representation of what the db models would look like
+class SectorLevel(BaseModel):
+    one: str
+    two: str
+class StockPrice(BaseModel):
+    date: date
+    volume: int
+    close_usd: float
+
 class Stock(BaseModel):
-    name: str
-
+    stock_prices: List[StockPrice]
+    sector_level: SectorLevel
+    
 @app.get("/")
 async def root():
     return {"message": "I am Groot!"}
 
-# TODO: Scratch pad for endpoints based on requirements (this is indpendent of how I would model it). PANDASSSSSSSSSS YAAAAAAAAASSSSS
-# NOTE: reading from csv should present like the data models do. So that's where this starts
-# any utils or pandas usage will start in here but as I grow out the endpoints lets assess if a util file will be cleaner in the polish run (prob will be)
+# NOTE: the version of pydantic FastApi relies on doesn't support custom root overwrite yet (so docs don't have `name` as key but `additonalPropX`)
+@app.get("/stocks")
+async def all_stocks() -> dict[str, Stock]: 
+    """ List all stock data. """
+    return app_data
 
-# list all stock data
-## how should this be presented? Like the csv just in UI form??
-## per frontend reqs:  "Just the price series overtime is fine"
-## so would it be adequate to return a json of each asset and then their value being a list of their prices 
-@app.get("/")
-async def all_stocks():
-    pass
-
-# retrieve data for a specific asset
-## what is an asset? how do I identify each stock/row in the data csv?
-## answer: an asset is a `name`` and it's most up-to-date data points
-@app.get("/asset/{name}")
-async def retrieve_asset(name: str):
-    pass
+@app.get("/stocks/{name}")
+async def retrieve_stock(name: str) -> Stock:
+    """ Retrieve data for a specific asset. """
+    return app_data[name]
     
-# calculate cumulative returns between two dates
-## does this mean each stock
-## prob need to have one stock and for each date in with that stock name, add or subtract
-# @app.get("/asset/return/{name}")
+@app.get("/stocks/return/{name}")
 ## rely on query params? <- rely on query params for the date range
 async def calculate_return(name: str, date_start: str, date_end: str):
-    pass
+    """ Calculate cumulative returns between two dates. """
+    asset_prices: list = app_data[name]["stock_prices"]
+    # filter list of asset_prices to just the daterange
+    # make sure it's in order
+    # double check what a cumulative return is
+    # take the two dates on the edge of each range and do the math
+    return "under construction"
