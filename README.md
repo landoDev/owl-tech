@@ -14,7 +14,7 @@ TODO: decide whether to break these out into each FE and BE dir README (what i w
 
 ## Getting Started
 
-First things first, let's stand up the backend:
+First things first, let's stand up the backend. From the project root, go into the `api` directory:
 
 ```bash
 cd api
@@ -27,7 +27,7 @@ cd api
     curl -sSL https://install.python-poetry.org | python -
     ```
 
-2. In `owl-tech/api`, install the required dependencies using Poetry (**Note**: From the root of the project where `pyproject.toml` is):
+2. In `owl-tech/api`, install the required dependencies using Poetry:
     ```bash
     poetry install
     ```
@@ -43,4 +43,4 @@ cd api
     ```
 5. Open `http://127.0.0.1:8000` in your browser to confirm the api is up!
 
-6. Access the FastAPI interactive documentation at `http://localhost:8000/docs`` to explore the available endpoints and interact with the live test scores.
+6. Access the FastAPI interactive documentation at `http://localhost:8000/docs` to explore the available endpoints and interact with the live test scores.
