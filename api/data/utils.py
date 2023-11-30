@@ -61,7 +61,6 @@ def _calculate_cumulative_returns(dataframe: pd.DataFrame) -> Tuple[pd.DataFrame
     df_daily_returns = dataframe.pct_change()
     # skip first row with NA
     df_daily_returns = df_daily_returns[1:]
-    # print(df_daily_returns.to_dict())
     df_cumulative_returns = (1 + df_daily_returns).cumprod() - 1
     df_cumulative_returns = df_cumulative_returns.reset_index()
     df_entire_period_return = df_cumulative_returns.iloc[:, 1:].tail(1) * 100
