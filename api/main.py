@@ -23,6 +23,10 @@ class StockPrice(BaseModel):
 class Stock(BaseModel):
     stock_prices: List[StockPrice]
     sector_level: SectorLevel
+
+class CumulativeReturns(BaseModel):
+    entire_period: float
+    cumulative_daily_returns: List[float]
     
 @app.get("/")
 async def root():
@@ -41,13 +45,7 @@ async def retrieve_stock(name: str) -> Stock:
     
 @app.get("/stocks/return/{name}")
 ## rely on query params? <- rely on query params for the date range
-async def calculate_return(name: str, date_start: str = '', date_end: str = ''): # dont leave defaults, just debugging
-    """ Calculate cumulative returns between two dates. """
-    asset_prices: list = app_data[name]["stock_prices"]
-    # TODO: UTIL ME
-    # filter list of asset_prices to just the daterange
-    # make sure it's in order
-    # find cumulative return formula
-    df = pd.DataFrame(app_data[name]["stock_prices"])
-    # ((df + 1).cumprod()-1).iloc[-1]
-    return df + 2
+async def calculate_return(name: str, date_start: str = '', date_end: str = ''):
+    """ Calculate cumulative returns between two dates. Returns all dates if none passed"""
+    # TODO: call util fn here when ready
+    return "under construction"
