@@ -5,13 +5,13 @@ from fastapi import FastAPI
 import pandas as pd
 from pydantic import BaseModel, Field
 
-from data.utils import read_csv_data
+from data.utils import read_csv_data, handle_cumulative_returns
 
 app = FastAPI()
 app_data = read_csv_data(filepath='data/stock-data.csv')
 
 ## RETURN TYPES ##
-# NOTE this mirrors how the csv is consumed and organized and is not a perfect representation of what the db models would look like
+# NOTE: this mirrors how the csv is consumed and organized
 class SectorLevel(BaseModel):
     one: str
     two: str
@@ -35,17 +35,45 @@ async def root():
 # NOTE: the version of pydantic FastApi relies on doesn't support custom root overwrite yet (so docs don't have `name` as key but `additonalPropX`)
 @app.get("/stocks")
 async def all_stocks() -> dict[str, Stock]: 
-    """ List all stock data. """
+    """ 
+    List all stock data. 
+
+    Returns
+    An object of objects representing data for each stock
+    """
     return app_data
 
 @app.get("/stocks/{name}")
 async def retrieve_stock(name: str) -> Stock:
-    """ Retrieve data for a specific asset. """
+    """ 
+    Retrieve data for a specific stock. 
+    
+    Parameters:
+        - name (str): The name of the stock.
+
+    Returns:
+    Stock: An object representing the data for the specified stock.
+        - stock_prices: List of stock price objects (day, volume, price as `close_usd`)
+        - sector_level: Object of the sector level of the stock.
+    """
     return app_data[name]
     
 @app.get("/stocks/return/{name}")
-## rely on query params? <- rely on query params for the date range
-async def calculate_return(name: str, date_start: str = '', date_end: str = ''):
-    """ Calculate cumulative returns between two dates. Returns all dates if none passed"""
-    # TODO: call util fn here when ready
-    return "under construction"
+async def calculate_return(name: str, date_start: str = '', date_end: str = '') -> CumulativeReturns:
+    """ 
+    Calculate cumulative returns between two dates.
+    
+    Returns cumulative return for all dates if no date query parameters are passed.
+    Expects date to be formatted `YYYY-MM-DD`.
+
+    Parameters:
+        - name (str): The name of the stock.
+        - date_start (str, optional): The start date for calculating cumulative returns (default: '').
+        - date_end (str, optional): The end date for calculating cumulative returns (default: '').
+
+    Returns:
+    CumulativeReturns: An object representing the calculated cumulative returns.
+        - entire_period: Cumulative return for the entire daterange given.
+        - cumulative_daily_returns: List of float values of each return per day in the daterange given
+    """
+    return handle_cumulative_returns(name, date_start, date_end, filepath='data/stock-data.csv')
