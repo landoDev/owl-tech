@@ -10,7 +10,19 @@
     - The frontend should allow users to view the list of all assets and their prices and select individual assets to view more details.
 
 ## Project Dependencies
-TODO: decide whether to break these out into each FE and BE dir README (what i would do for a monorepo like this normally)
+> Both Frontend and Backend dependenices are listed here
+### Backend
+- **Python:** ^3.10
+  - The programming language used for development.
+
+- **FastAPI:** ^0.104.1
+  - A modern, fast (high-performance), web framework for building APIs with Python.
+
+- **Uvicorn:** ^0.24.0.post1
+  - ASGI server for running FastAPI applications. (with extras "standard")
+
+- **Pandas:** ^2.1.3
+  - A powerful data manipulation library for Python, used for working with structured data.
 
 ## Getting Started
 
