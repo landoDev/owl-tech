@@ -2,19 +2,37 @@ import React,  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { LineChart } from '@mui/x-charts/LineChart';
 
+
+interface StockPrices {
+  date: string;
+  volume: number;
+  close_usd: number
+}
+interface StockDetails {
+  stock_prices: StockPrices[]
+}
+
+
 function App() {
   const [stocks, setStocks] = useState([])
 
   useEffect(()=> {
     axios.get(`${process.env.REACT_APP_STOCKS_API_URL, 'http://127.0.0.1:8000'}/stocks`)
     .then(response => {
-      setStocks(response.data)
+      // let's form this int a usable object to call in for our line charts
+      for (const [key, value] of Object.entries<StockDetails>(response.data)) {
+        // TODO structure me below
+        // console.log(key, value.stock_prices.map(stock => {x: stock.date, y: stock.close_usd}))
+        // setStocks(prevStocks => [...stocks, {[key]: {}}])
+      }
+      setStocks([])
     })
     .catch(error => {
       console.error(error);
     });
   }, []);
-  Object.entries(stocks).map(stock => console.log(stock[0], stock[1]["stock_prices"]))
+
+
   return (
     <div className="App">
       <header className="App-header">
@@ -28,20 +46,9 @@ function App() {
         {/* above this table is a date filter that the user can use to filter the date range and see the total cumulative returns and daily returns for that period */}
         {/* <LineChart */}
         {/* TODO: make me a component to keep App clean */}
-        {stocks && Object.entries(stocks).map(stock => {
-          // TODO: destructure me
-          // this is getting ugly lol
-          console.log(stock)
-          return (
-            <>
-            <p>{stock[0]}</p>
-            {/* <LineChart
-            xAxis={stock} 
-            /> */}
-            </>
-
-          )
-        })}
+        {/* {stocks && 
+          
+        } */}
       </div>
     </div>
   );
