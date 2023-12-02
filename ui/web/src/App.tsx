@@ -14,7 +14,7 @@ function App() {
       console.error(error);
     });
   }, []);
-  console.log(stocks)
+  Object.entries(stocks).map(stock => console.log(stock[0], stock[1]["stock_prices"]))
   return (
     <div className="App">
       <header className="App-header">
@@ -26,7 +26,22 @@ function App() {
         {/* The asset name should be big and clickable */}
         {/* an SPA page opens up with their Line chart, and the total cumulative returns and a table of the daily returns for their lifespan */}
         {/* above this table is a date filter that the user can use to filter the date range and see the total cumulative returns and daily returns for that period */}
-        
+        {/* <LineChart */}
+        {/* TODO: make me a component to keep App clean */}
+        {stocks && Object.entries(stocks).map(stock => {
+          // TODO: destructure me
+          // this is getting ugly lol
+          console.log(stock)
+          return (
+            <>
+            <p>{stock[0]}</p>
+            {/* <LineChart
+            xAxis={stock} 
+            /> */}
+            </>
+
+          )
+        })}
       </div>
     </div>
   );
