@@ -87,17 +87,29 @@ function App() {
         }
         {stocks && Object.entries(stocks).map(stock => {
           const [stockName, stockDetails] = stock
+          const xAxis = [{data: stockDetails.stock_prices.map(stock => stock.date), scaleType: 'band' as 'band'}]
+          const series = [{data: stockDetails.stock_prices.map(stock => stock.close_usd), label: 'USD', color: 'green'}]
           return (
             <div>
             {/* only show assests that were active/has data in the selected year */}
             {!!stockDetails.stock_prices.length &&
             <>
-            <Link to={`${stockName}`} style={{fontSize: '20px', color: 'inherit'}}>{stockName}</Link>
+            <Link 
+            to={`${stockName}`} 
+            style={{fontSize: '20px', color: 'inherit'}}
+            state={{
+              selectedYear: stockYear, 
+              xAxis: xAxis,
+              series: series
+            }} // TODO: see about passing the line chart?
+            >
+              {stockName}
+            </Link>
              <LineChart
               width={1000}
               height={500}
-              xAxis={[{data: stockDetails.stock_prices.map(stock => stock.date), scaleType: 'band'}]}
-              series={[{data: stockDetails.stock_prices.map(stock => stock.close_usd), label: 'USD', color: 'green'}]}
+              xAxis={xAxis}
+              series={series}
             />
             </>
           }
