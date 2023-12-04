@@ -7,6 +7,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
 import LinearProgress from '@mui/material/LinearProgress';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { Link } from 'react-router-dom';
 
 // NOTE: these are in snake case because that is what comes back from the python BE at this time
 interface SectorLevel {
@@ -91,7 +92,7 @@ function App() {
             {/* only show assests that were active/has data in the selected year */}
             {!!stockDetails.stock_prices.length &&
             <>
-            <div>{stockName}</div>
+            <Link to={`${stockName}`}>{stockName}</Link>
              <LineChart
               width={1000}
               height={500}

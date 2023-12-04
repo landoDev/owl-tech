@@ -8,7 +8,9 @@ import './index.css';
 import App from './App';
 import ErrorPage from './error-page';
 import reportWebVitals from './reportWebVitals';
+import StockPage from './StockPage';
 
+// NOTE: can also be passed as JSX with createRoutesFromElements
 const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +18,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [],
   },
+  {
+    path: "/:stockName",
+    element: <StockPage />,
+  }
 ])
 
 const root = ReactDOM.createRoot(
