@@ -92,12 +92,12 @@ function App() {
             {/* only show assests that were active/has data in the selected year */}
             {!!stockDetails.stock_prices.length &&
             <>
-            <Link to={`${stockName}`}>{stockName}</Link>
+            <Link to={`${stockName}`} style={{fontSize: '20px', color: 'inherit'}}>{stockName}</Link>
              <LineChart
               width={1000}
               height={500}
               xAxis={[{data: stockDetails.stock_prices.map(stock => stock.date), scaleType: 'band'}]}
-              series={[{data: stockDetails.stock_prices.map(stock => stock.close_usd), label: 'USD'}]}
+              series={[{data: stockDetails.stock_prices.map(stock => stock.close_usd), label: 'USD', color: 'green'}]}
             />
             </>
           }
