@@ -3,35 +3,51 @@ import axios from 'axios';
 import { LineChart } from '@mui/x-charts/LineChart';
 
 
+// NOTE: these are in snake case because that is what comes back from the python BE at this time
+interface SectorLevel {
+  one: string;
+  two: string;
+}
+
 interface StockPrices {
   date: string;
   volume: number;
-  close_usd: number
+  close_usd: number;
 }
-interface StockDetails {
+interface Stock {
   stock_prices: StockPrices[]
+  sector_level: SectorLevel
 }
+
+interface StockData {
+  xAxis: string[];
+  series: number[];
+}
+
 
 
 function App() {
-  const [stocks, setStocks] = useState([])
+  const [stockData, setStocksData] = useState<{[index: string]: StockData} | {}>({})
 
   useEffect(()=> {
     axios.get(`${process.env.REACT_APP_STOCKS_API_URL, 'http://127.0.0.1:8000'}/stocks`)
     .then(response => {
-      // let's form this int a usable object to call in for our line charts
-      for (const [key, value] of Object.entries<StockDetails>(response.data)) {
-        // TODO structure me below
-        // console.log(key, value.stock_prices.map(stock => {x: stock.date, y: stock.close_usd}))
-        // setStocks(prevStocks => [...stocks, {[key]: {}}])
+      // on response, set the stocks with their name as the key and a list of each stock price object associated
+      for (const [key, stockDetails] of Object.entries<Stock>(response.data)) {
+        // NOTE: in later iterations make a more scalable solution
+        setStocksData(prevStocks => ({
+          ...prevStocks,
+          [key]: {
+            "xAxis": stockDetails.stock_prices.map(stock => stock.date), scaleType: 'band',
+            "series": stockDetails.stock_prices.map(stock => stock.close_usd)
+          }
+        }))
       }
-      setStocks([])
     })
     .catch(error => {
       console.error(error);
     });
   }, []);
-
 
   return (
     <div className="App">
@@ -46,9 +62,25 @@ function App() {
         {/* above this table is a date filter that the user can use to filter the date range and see the total cumulative returns and daily returns for that period */}
         {/* <LineChart */}
         {/* TODO: make me a component to keep App clean */}
-        {/* {stocks && 
-          
-        } */}
+        {stockData && Object.entries(stockData).map(stock => {
+          const [stockName, stockDetails] = stock
+          console.log(stockDetails)
+          // console.log('StockName', stockName, 'stockDetails',{} stockDetails.stock_prices.map(x => x.close_usd))
+          // console.log()
+          // this nested looping is not going to cut it
+          return (
+            <>
+            <div key={stockName}>{stockName}</div>
+            <LineChart
+              width={500}
+              height={300}
+              xAxis={[{data: stockDetails.xAxis, scaleType: 'band'}]}
+              series={[{data: stockDetails.series}]}
+            />
+            </>
+          )
+        })
+        }
       </div>
     </div>
   );
