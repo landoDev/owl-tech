@@ -25,16 +25,16 @@ interface StockData {
 }
 
 
-
 function App() {
   const [stockData, setStocksData] = useState<{[index: string]: StockData} | {}>({})
+  const [selectedYear, setSelectedYear] = useState("2020")
 
   useEffect(()=> {
     axios.get(`${process.env.REACT_APP_STOCKS_API_URL, 'http://127.0.0.1:8000'}/stocks`)
     .then(response => {
       // on response, set the stocks with their name as the key and a list of each stock price object associated
       for (const [key, stockDetails] of Object.entries<Stock>(response.data)) {
-        // NOTE: in later iterations make a more scalable solution
+        // NOTE: 
         setStocksData(prevStocks => ({
           ...prevStocks,
           [key]: {
@@ -48,6 +48,8 @@ function App() {
       console.error(error);
     });
   }, []);
+
+  console.log(stockData)
 
   return (
     <div className="App">
@@ -74,8 +76,8 @@ function App() {
             <LineChart
               width={500}
               height={300}
-              xAxis={[{data: stockDetails.xAxis, scaleType: 'band'}]}
-              series={[{data: stockDetails.series}]}
+              xAxis={[{data: stockDetails.xAxis.filter(stock => stock.split("-")[0] === selectedYear), scaleType: 'band'}]}
+              series={[{data: stockDetails.series[]}]}
             />
             </>
           )
