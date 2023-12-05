@@ -10,16 +10,13 @@ import { LineChart } from "@mui/x-charts/LineChart";
 
 import YearSelector from "../components/YearSelector";
 import { Stock, StockPrice } from './HomePage';
-import useAvailableYears from '../hooks/useAvailableYears';
 import { Button } from '@mui/material';
 
-// TODO: make interface for me
 const StockPage = () => { 
     const {state: {stockName, selectedYear}} = useLocation();
     const [stockDetails, setStockDetails] = useState<Stock>();
     const [stockYear, setStockYear] = useState<string>(selectedYear);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isCalculating, setIsCalculating] = useState<boolean>(false);
     const [fromDateValue, setFromDateValue] = useState<Dayjs | null>(dayjs(`${selectedYear}-01-01`));
     const [toDateValue, setToDatevalue] = useState<Dayjs | null>(dayjs(`${selectedYear}-12-31`));
     const [cumulativeReturnValue, setCumulativeReturnValue] = useState<number | null>(null);
@@ -43,24 +40,17 @@ const StockPage = () => {
         });
       }, [stockYear]);
 
-    const fetchCumulativeReturns = (dateStart: any, dateEnd: any) => {
-        return
-    }
-
     const handleReturnsSubmit = () => {
         const from = fromDateValue?.format('YYYY-MM-DD');
         const to = toDateValue?.format('YYYY-MM-DD');
-        setIsCalculating(true);
         axios.get(
         `${process.env.REACT_APP_STOCKS_API_URL, 'http://127.0.0.1:8000'}/stocks/return/${stockName}?date_start=${from}&date_end=${to}`
         ).then(response => {
             const { data: { entire_period } } = response;
             setCumulativeReturnValue(entire_period);
-          setIsCalculating(false);
         })
         .catch(error => {
           console.error(error);
-          setIsCalculating(false);
         });
     }
 
@@ -87,7 +77,7 @@ const StockPage = () => {
             <div style={{display: 'flex', justifyContent: 'space-around', width: '75%' ,alignItems: 'center'}}>
                 <div>
                     {cumulativeReturnValue &&
-                    <div>Calculated Return: ${cumulativeReturnValue}</div>
+                        <div>Calculated Return: {cumulativeReturnValue}%</div>
                     }
                 </div>
                 <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>

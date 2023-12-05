@@ -1,10 +1,7 @@
-from datetime import datetime, date, timedelta
 import csv
 from typing import Tuple
 
-import numpy as np
 import pandas as pd
-from pydantic import BaseModel
 
 
 def read_csv_data(filepath: str = 'stock-data.csv') -> dict[str, dict[str, str]]:

@@ -22,8 +22,6 @@ export interface Stock {
 }
 
 // With less of a time constraint, I'd consider redux
-
-
 const HomePage = () => {
     const [stocks, setStocks] = useState<{[index: string]: Stock} | {}>({});
     const [stockYear, setStockYear] = useState<string>("2023");
@@ -79,16 +77,10 @@ const HomePage = () => {
             <Link 
             to={`${stockName}`} 
             style={{fontSize: '20px', color: 'inherit'}}
-            // TODO: type me
+            // state to pass to the associated asset details page "StockPage.tsx"
             state={{
               stockName: stockName,
               selectedYear: stockYear, 
-              height: height,
-              width: width,
-              xAxis: xAxis,
-              series: series,
-              chartData: stockDetails.stock_prices,
-              sectorLevel: stockDetails.sector_level
             }}
             >
               {stockName}
