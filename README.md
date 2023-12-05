@@ -15,7 +15,7 @@ This web application is designed to provide users with insights into fixed stock
 
 - **Pandas:** ^2.1.3
   - A powerful data manipulation library for Python, used for working with structured data.
-  
+
 - **Httpx:** ^0.21.2
   - A fully featured HTTP client for Python 3, which provides sync and async APIs, and support for both HTTP/1.1 and HTTP/2. Required to use the TestClient from FastAPI.
 
@@ -43,7 +43,7 @@ This web application is designed to provide users with insights into fixed stock
 
 ## Getting Started
 
-First things first, let's stand up the backend. From the project root, go into the `api` directory:
+#### **First things first, let's stand up the backend. From the project root, go into the `api` directory:**
 
 ```bash
 cd api
@@ -74,7 +74,7 @@ cd api
 
 6. Access the FastAPI interactive documentation at `http://localhost:8000/docs` to explore the available endpoints and interact with the live test scores.
 
-Now that your backend is up and the api is listening it's time to fire up the UI!
+#### **Now that your backend is up and the api is listening it's time to fire up the UI!**
 
 1. Navigate to the frontend directory. `ui/web/`
 2. Install the required dependencies. 
