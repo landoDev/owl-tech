@@ -14,7 +14,7 @@ import { Button } from '@mui/material';
 
 const StockPage = () => { 
     const {state: {stockName, selectedYear}} = useLocation();
-    const [stockDetails, setStockDetails] = useState<Stock>();
+    const [stockDetails, setStockDetails] = useState<Stock | null>(null);
     const [stockYear, setStockYear] = useState<string>(selectedYear);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [fromDateValue, setFromDateValue] = useState<Dayjs | null>(dayjs(`${selectedYear}-01-01`));
@@ -28,10 +28,13 @@ const StockPage = () => {
         .then(response => {
             const { data: { stock_prices, sector_level} } = response
             const filteredPrices = stock_prices.filter((entry: StockPrice )=> entry.date.split("-")[0] === stockYear);
+            filteredPrices.length ?
             setStockDetails({
                 "stock_prices": filteredPrices,
                 "sector_level": sector_level
             })
+            :
+            setStockDetails(null)
           setIsLoading(false)
         })
         .catch(error => {
@@ -64,7 +67,7 @@ const StockPage = () => {
                     <CircularProgress />
                 </div>
             }
-            {stockDetails &&
+            {stockDetails ? // if we have data for the year show it, otherwise tell user
             <>
             <LineChart 
                 height={500} 
@@ -72,8 +75,7 @@ const StockPage = () => {
                 xAxis={[{data: stockDetails?.stock_prices.map(stock => stock.date), scaleType: 'band' as 'band'}]} 
                 series={[{data: stockDetails?.stock_prices.map(stock => stock.close_usd), label: 'USD', color: 'green'}]} 
             />
-            </>
-            }
+     
             <div style={{display: 'flex', justifyContent: 'space-around', width: '75%' ,alignItems: 'center'}}>
                 <div>
                     {cumulativeReturnValue &&
@@ -111,6 +113,10 @@ const StockPage = () => {
                 </div>
 
             </div>
+            </>
+            :
+            <div>No Data for {stockYear}</div>
+            }
         </div>
     )
 }
