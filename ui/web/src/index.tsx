@@ -4,6 +4,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 import './index.css';
 import App from './App';
 import ErrorPage from './error-page';
@@ -35,7 +38,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {/* date library adapter must be setup to render date picker components */}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <RouterProvider router={router} />
+    </LocalizationProvider>
   </React.StrictMode>
 );
 

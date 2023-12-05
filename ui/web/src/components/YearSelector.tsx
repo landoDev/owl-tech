@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import useAvailableYears from '../hooks/useAvailableYears';
 
 // interface YearSelectorProps {
 //     setYear:
@@ -12,9 +11,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 const YearSelector = ({stockYear, setStockYear}: any) => {
     // const [stockYear, setStockYear] = useState<string>("2023");
     // should go in component, creates a list of years from now to 1999, when our stock data starts
-    const availableYears = Array.from(
-      {length: (new Date().getFullYear() - 1998)}, (_, i) => (new Date().getFullYear() - i).toString()
-    )
+    const availableYears = useAvailableYears()
     const handleChange = (event: SelectChangeEvent) => {
       setStockYear(event.target.value);
     };

@@ -1,19 +1,29 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
+import dayjs, { Dayjs } from 'dayjs';
+
 
 import CircularProgress from '@mui/material/CircularProgress';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LineChart } from "@mui/x-charts/LineChart";
 
 import YearSelector from "../components/YearSelector";
 import { Stock, StockPrice } from './HomePage';
+import useAvailableYears from '../hooks/useAvailableYears';
+import { Button } from '@mui/material';
 
 // TODO: make interface for me
 const StockPage = () => { 
-    const {state: {stockName, selectedYear}} = useLocation()
+    const {state: {stockName, selectedYear}} = useLocation();
     const [stockDetails, setStockDetails] = useState<Stock>();
     const [stockYear, setStockYear] = useState<string>(selectedYear);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isCalculating, setIsCalculating] = useState<boolean>(false);
+    const [fromDateValue, setFromDateValue] = useState<Dayjs | null>(dayjs(`${selectedYear}-01-01`));
+    const [toDateValue, setToDatevalue] = useState<Dayjs | null>(dayjs(`${selectedYear}-12-31`));
+    const [cumulativeReturnValue, setCumulativeReturnValue] = useState();
+
 
     useEffect(()=> {
         setIsLoading(true)
@@ -32,6 +42,27 @@ const StockPage = () => {
           setIsLoading(false)
         });
       }, [stockYear]);
+
+    const fetchCumulativeReturns = (dateStart: any, dateEnd: any) => {
+        return
+    }
+
+    const handleReturnsSubmit = () => {
+        const from = fromDateValue?.format('YYYY-MM-DD');
+        const to = toDateValue?.format('YYYY-MM-DD');
+        setIsCalculating(true);
+        axios.get(
+        `${process.env.REACT_APP_STOCKS_API_URL, 'http://127.0.0.1:8000'}/return/${stockName}?date_start=${from}&date_end=${to}`
+        ).then(response => {
+            const { data: { entire_period } } = response;
+            setCumulativeReturnValue(entire_period);
+          setIsCalculating(false);
+        })
+        .catch(error => {
+          console.error(error);
+          setIsCalculating(false);
+        });
+    }
 
     return (
         <div>
@@ -53,9 +84,41 @@ const StockPage = () => {
             />
             </>
             }
-            <div style={{display: 'flex', justifyContent: 'space-evenly', width: '70%'}}>
-                <div>Put calculated total return here</div>
-                <div>put from-to calculator form here default is entire availableYears</div>
+            <div style={{display: 'flex', justifyContent: 'space-evenly', width: '56%'}}>
+                <div>
+                    <p>All Time Return</p>
+                    <p>Calculated Return</p>
+                </div>
+                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'}}>
+                    <>
+                        <p>Calculate Cumulative Returns</p>
+                    </>
+                    <div>
+                    <DatePicker 
+                        label="From"
+                        format='YYYY-MM-DD' 
+                        value={fromDateValue} 
+                        defaultValue={fromDateValue}
+                        onChange={(newValue) => setFromDateValue(newValue)}
+                    />
+                    <DatePicker 
+                        label="To"
+                        format='YYYY-MM-DD' 
+                        value={toDateValue} 
+                        defaultValue={toDateValue} 
+                        onChange={(newValue) => setToDatevalue(newValue)}
+                    />
+                    </div>
+                    <Button 
+                        style={{alignSelf: 'end', marginTop: '2%'}}
+                        variant="contained"
+                        color="success"
+                        onClick={handleReturnsSubmit}
+                    >
+                        Calculate
+                    </Button>
+                </div>
+
             </div>
         </div>
     )
